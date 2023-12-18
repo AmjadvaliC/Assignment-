@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Registration Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 80%;
+      max-width: 400px;
+      margin: auto;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+    }
+
+    /* Use flex display for label to align checkbox and text in the same line */
+    #termsAndConditions {
+      display: flex;
+      flex-wrap: wrap;
+      margin-left: -380px;
+    }
+
+    #termsAndConditionsCheckbox {
+      margin-right: -360px; /* Adjust the spacing between the checkbox and text */
+    }
+
+    button {
+      background-color: #4caf50;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .error {
+      color: #f00;
+      margin-top: 5px;
+    }
+
+    /* Media Queries */
+    @media screen and (max-width: 600px) {
+      form {
+        width: 90%;
+      }
+    }
+
+    @media screen and (max-width: 400px) {
+      input, select {
+        margin-bottom: 10px;
+      }
+    }
+
+    @media screen and (max-width: 320px) {
+      input, select {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<form id="registrationForm" onsubmit="validateForm(); return false;">
+  <div>
+    <!-- Input fields with corresponding error divs -->
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" name="firstName" required>
+    <div id="firstNameError" class="error"></div>
+  
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" name="lastName" required>
+    <div id="lastNameError" class="error"></div>
+  
+    <label for="email">Email Address:</label>
+    <input type="email" id="email" name="email" required>
+    <div id="emailError" class="error"></div>
+  
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    <div id="passwordError" class="error"></div>
+  
+    <label for="confirmPassword">Confirm Password:</label>
+    <input type="password" id="confirmPassword" name="confirmPassword" required>
+    <div id="confirmPasswordError" class="error"></div>
+  
+    <label for="dob">Date of Birth:</label>
+    <input type="date" id="dob" name="dob" required>
+    <div id="dobError" class="error"></div>
+  
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender" required>
+      <option value="" disabled selected>Select gender</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select>
+    <div id="genderError" class="error"></div>
+  </div>
+
+  <!-- Terms and Conditions checkbox with corresponding error div -->
+  <label id="termsAndConditions">
+    <input type="checkbox" id="termsAndConditionsCheckbox" name="termsAndConditions" required>
+    I agree to the Terms and Conditions
+  </label>
+  <div id="termsAndConditionsError" class="error"></div>
+
+  <!-- Submit button -->
+  <button type="submit">Register</button>
+
+  <!-- Overall error message div -->
+  <div id="errorMessage" class="error"></div>
+
+</form>
+
+<script>
+  function validateForm() {
+    // Array to store input field IDs
+    var inputFields = ["firstName", "lastName", "email", "password", "confirmPassword", "dob", "gender"];
+    var hasErrors = false;
+
+    // Clear previous errors
+    clearErrors();
+
+    // Validate each input field
+    inputFields.forEach(function (field) {
+      var value = document.getElementById(field).value;
+      var errorId = field + "Error";
+
+      if (!value) {
+        document.getElementById(errorId).innerHTML = capitalizeFirstLetter(field) + " is required!";
+        hasErrors = true;
+      }
+    });
+
+    // Validate Terms and Conditions checkbox
+    var termsAndConditions = document.getElementById("termsAndConditionsCheckbox");
+    if (!termsAndConditions.checked) {
+      document.getElementById("termsAndConditionsError").innerHTML = "You must agree to the Terms and Conditions!";
+      hasErrors = true;
+    }
+
+    // Validate password matching
+    var password = document.getElementById("password").value;
+    var confirmPassword = document.getElementById("confirmPassword").value;
+    if (password !== confirmPassword) {
+      document.getElementById("passwordError").innerHTML = "Passwords do not match!";
+      document.getElementById("confirmPasswordError").innerHTML = "Passwords do not match!";
+      hasErrors = true;
+    }
+
+    // If there are any errors, stop form submission
+    if (hasErrors) {
+      return;
+    }
+
+    // If all validations pass, you can proceed with form submission or other actions.
+    alert("Registration successful!");
+
+    // Clear the form
+    clearForm();
+  }
+
+  function clearErrors() {
+    // Array to store error div IDs
+    var errorFields = ["firstName", "lastName", "email", "password", "confirmPassword", "dob", "gender", "termsAndConditions"];
+    errorFields.forEach(function (field) {
+      document.getElementById(field + "Error").innerHTML = "";
+    });
+  }
+
+  function clearForm() {
+    // Array to store input field IDs
+    var inputFields = ["firstName", "lastName", "email", "password", "confirmPassword", "dob", "gender"];
+    inputFields.forEach(function (field) {
+      document.getElementById(field).value = "";
+    });
+
+    // Uncheck the Terms and Conditions checkbox
+    document.getElementById("termsAndConditionsCheckbox").checked = false;
+  }
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+</script>
+
+</body>
+</html>
